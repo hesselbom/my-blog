@@ -13,7 +13,7 @@ export default function BlogPostArchiveLink({
         <a className={styles.title}>{title}</a>
       </Link>
 
-      <datetime>{formatDate(date)}</datetime>
+      <time>{formatDate(date)}</time>
     </div>
   )
 }

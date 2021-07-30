@@ -9,4 +9,7 @@ test('if it works', () => {
 
   expect(formatDate(new Date(2013, 11, 10)))
     .toBe('December 10, 2013')
+
+  expect(formatDate('2013-12-10'))
+    .toBe('December 10, 2013')
 })

@@ -10,6 +10,8 @@
     "test": "jest"
   },
   "dependencies": {
+    "@edwinjoseph/prismic-richtext-markdown": "^1.2.5",
+    "@prismicio/client": "^5.1.0",
     "marked": "^2.1.3",
     "next": "11.0.1",
     "react": "17.0.2",

@@ -3,41 +3,29 @@ import Image from 'next/image'
 import styles from '../styles/Home.module.css'
 import Header from '../components/Header'
 import BlogPost from '../components/BlogPost'
+import convertPrismicToData from '../utils/convertPrismicToData'
+import Prismic from '@prismicio/client'
 
-export default function Home() {
-  const posts = [
-    {
-      slug: 'primer',
-      title: 'Primer: When You Have Too Much to Do',
-      content: `You have a to-do list that scrolls on for days. You are managing multiple projects, getting lots of email and messages on different messaging systems, managing finances and personal health habits and so much more.
+const ONE_DAY_IN_SECONDS = 86400
 
-It all keeps piling up, and it can feel overwhelming.
+export async function getStaticProps(context) {
+  const client = Prismic.client('https://my-blog-t.cdn.prismic.io/api/v2', {})
+  const data = await client.query(
+    Prismic.Predicates.at('document.type', 'blog_post'),
+    { orderings : '[my.blog_post.publish_date desc]' }
+  )
 
-How do you keep up with it all? How do you find focus and peace and get stuff accomplished when you have too much on your plate?
+  const posts = data.results.map(convertPrismicToData)
 
-In this primer, I’ll look at some key strategies and tactics for taking on an overloaded life with an open heart, lots of energy, and a smile on your face.
-
-### The First Step: Triage
-
-Whether you’re just starting your day, or you’re in the middle of the chaos and just need to find some sanity … the first step is to get into triage mode.`
-    },
-    {
-      slug: 'primer2',
-      title: 'Primer2: When You Have Too Much to Do',
-      content: `You have a to-do list that scrolls on for days. You are managing multiple projects, getting lots of email and messages on different messaging systems, managing finances and personal health habits and so much more.
-
-It all keeps piling up, and it can feel overwhelming.
-
-How do you keep up with it all? How do you find focus and peace and get stuff accomplished when you have too much on your plate?
-
-In this primer, I’ll look at some key strategies and tactics for taking on an overloaded life with an open heart, lots of energy, and a smile on your face.
-
-### The First Step: Triage
-
-Whether you’re just starting your day, or you’re in the middle of the chaos and just need to find some sanity … the first step is to get into triage mode.`
+  return {
+    props: {
+      posts,
+      revalidate: ONE_DAY_IN_SECONDS
     }
-  ]
+  }
+}
 
+export default function Home({ posts }) {
   return (
     <>
       <Head>
@@ -50,8 +38,8 @@ Whether you’re just starting your day, or you’re in the middle of the chaos 
 
         {
           posts.map(p => (
-            <div className={styles.post}>
-              <BlogPost key={p.slug} {...p} />
+            <div className={styles.post} key={p.slug}>
+              <BlogPost {...p} />
             </div>
           ))
         }

@@ -14,6 +14,8 @@ const months = [
 ]
 
 export default function formatDate(date) {
+  date = new Date(date)
+
   return (
     months[date.getMonth()] + ' ' +
     date.getDate() + ', ' +
